@@ -30,11 +30,6 @@ const ItemListContainer = () => {
  
 
 
-
-
-  
-
-
     const getProducts = async() => {
     const response = await fetch("https://fakestoreapi.com/products")
     const datos = await response.json()
@@ -43,13 +38,12 @@ const ItemListContainer = () => {
       if ( datos.length > 0){
         setTimeout(()=>{
           resolve("hay productos disponibles")
-
-        }, 3000)
+          
+        }, 5000)
       }else{
         reject("No hay productos disponibles")
       }
     })
-  
   
     mostrarProductos.then((resultado)=> {
       console.log(resultado)
@@ -58,7 +52,6 @@ const ItemListContainer = () => {
       console.log(error)
     })
   
-
 
     let datosFiltados= datos.filter((datos) => datos.category === category);
     if (datosFiltados == ''){
@@ -76,9 +69,6 @@ const ItemListContainer = () => {
 
     getProducts().then((producto) => setProductos(producto))
 
-
-    
-    
 
   }, [category])
 

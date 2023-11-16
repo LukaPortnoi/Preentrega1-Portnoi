@@ -1,35 +1,77 @@
 import React from 'react'
 import usarContador from '../../hooks/useCounter'
-import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { useToast } from '@chakra-ui/react'
+import Box from '@mui/material/Box';
+import Badge from '@mui/material/Badge';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
+import { styled } from '@mui/material/styles';
 
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const ItemCount = () => {
 
 const {contador, incrementar, decrementar} = usarContador(0,1)
-const toast = useToast()
 
 
-const agregarCarrito= ()=>{
-  alert(`se agrego al carrito ${contador} productos`)
-}
+const [open, setOpen] = React.useState(false);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1.5),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
+
 
   return (
     <div>
-        <Stack direction="row" spacing={2} className='contador'>
-        <Button variant="contained" onClick={decrementar}  size="small" style={{ fontSize:'20px' }}>
-            -
-        </Button>
         
-        <Button disabled  size="small" style={{ fontSize:'20px', color:'black'}}>{contador} </Button>
-        <Button className='botnMasyMenos' variant="contained"  onClick={incrementar}  style={{ fontSize:'20px' }}>
-            +
+        <ButtonGroup style={{  marginBottom: '5%'}}>
+          
+          <Stack direction="row" spacing={1.5}>
+          <Button aria-label="reduce" onClick={decrementar} >
+            <RemoveIcon fontSize="small" />
+          </Button>
+          <Item>{contador}</Item>
+          <Button aria-label="increase" onClick={incrementar}>
+            <AddIcon fontSize="small" />
+          </Button>
+          </Stack>
+          
+          
+        </ButtonGroup>
+        <Button style={{  marginTop: '5%!important', display:'flex', margin:'auto' }} onClick={handleClick} variant="contained" size="medium">
+          Add to cart
         </Button>
-        <br />
-    </Stack>
-        <Button variant="contained" size="large" className='botonAgregarCarrito' onClick={agregarCarrito}>Agregar</Button>
-    </div>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+            Se agregaron {contador} productos
+          </Alert>
+        </Snackbar>
+      </div>
      
 
   )

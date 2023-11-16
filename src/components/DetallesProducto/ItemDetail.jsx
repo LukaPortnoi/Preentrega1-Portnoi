@@ -27,7 +27,7 @@ const ItemDetail = ({dato}) => {
                 <CCardTitle className='tituloCarta'>{dato.title}</CCardTitle>
                 </CCol>
                 <CCol md={5} style={{ width: '40%', maxHeight: '200px', display:'flex', margin:'auto' }}>
-                <CCardBody>
+                <CCardBody style={{ marginTop: '-30%' }}>
                     <CCardText className='precio' style={{ display:'flex', margin:'auto', width: '100%', justifyContent:'center' }}>
                     Precio: {dato.price}
                     </CCardText>
