@@ -1,9 +1,6 @@
 import React from 'react'
 import usarContador from '../../hooks/useCounter'
 import Button from '@mui/material/Button';
-import { useToast } from '@chakra-ui/react'
-import Box from '@mui/material/Box';
-import Badge from '@mui/material/Badge';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';

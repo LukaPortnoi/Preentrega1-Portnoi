@@ -34,7 +34,7 @@ const ItemListContainer = () => {
     const response = await fetch("https://fakestoreapi.com/products")
     const datos = await response.json()
     
-    const mostrarProductos = new Promise((resolve, reject) => {
+    /*const mostrarProductos = new Promise((resolve, reject) => {
       if ( datos.length > 0){
         setTimeout(()=>{
           resolve("hay productos disponibles")
@@ -51,7 +51,7 @@ const ItemListContainer = () => {
     .catch((error)=> {
       console.log(error)
     })
-  
+  */
 
     let datosFiltados= datos.filter((datos) => datos.category === category);
     if (datosFiltados == ''){
@@ -67,7 +67,16 @@ const ItemListContainer = () => {
 
   useEffect(() =>{
 
-    getProducts().then((producto) => setProductos(producto))
+    getProducts().then((producto) => {
+      setTimeout(()=>{
+        setProductos(producto)
+          
+        }, 2000)
+    }
+    ).catch((error) => {
+      console.log(error)
+    })
+      
 
 
   }, [category])

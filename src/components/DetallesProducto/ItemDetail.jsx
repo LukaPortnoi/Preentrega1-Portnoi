@@ -9,9 +9,6 @@ import { CCard, CRow , CCol, CCardImage , CCardBody , CCardTitle , CCardText} fr
 
 const ItemDetail = ({dato}) => {
     
-
-    
-
   return (
     <div>
       
