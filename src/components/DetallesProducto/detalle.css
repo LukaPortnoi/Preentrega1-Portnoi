@@ -1,0 +1,63 @@
+.contornoDetalle{
+    max-width: 60%;
+    margin: auto;
+    justify-content: center;
+    box-sizing: border-box;
+    margin-top: 2%;
+}
+
+.imagen{
+    width: 20%;
+    display: flex;
+    margin: auto;
+}
+
+.CartaAdentro{
+    display: flex !important;
+    width: 100%;
+}
+
+
+.precio{
+    color: #000;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+
+
+.col1Card{
+    width: 40%;
+    margin: auto;
+}
+
+.tituloCarta{
+    font-weight: 700;
+    font-size: 18px;
+    text-align: center;
+    display: block;
+    padding: 20px 0px;
+    box-sizing: border-box;
+    color: #666;
+}
+
+.contador{
+    margin: 20px 0px 10px 0px;
+    /* margin-top: 30px; */
+    justify-content: center;
+}
+
+.botonAgregarCarrito{
+    margin: auto !important;
+    display: flex !important;
+    margin-bottom: 20px !important;
+}
+
+.botnMasyMenos{
+    width: 20% !important;
+}
+
+.cardTama{
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.1);
+    height: 300px;
+}

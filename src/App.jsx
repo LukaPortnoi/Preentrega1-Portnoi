@@ -1,9 +1,11 @@
 import React from 'react'
-import NavBar from './components/NavBar'
-import ItemListContainer from './components/ItemListContainer'
-
-import { BrowserRouter } from 'react-router-dom'
-
+import NavBar from './components/Navbar/NavBar'
+import ItemListContainer from './components/Catalogo/ItemListContainer'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Home from './components/PantallasNavbar/Home'
+import Cart from './components/PantallasNavbar/Cart'
+import About from './components/PantallasNavbar/About'
+import ItemDetailContainer from './components/DetallesProducto/ItemDetailContainer'
 
 
 
@@ -12,11 +14,32 @@ import { BrowserRouter } from 'react-router-dom'
 const App = () => {
 
   return (
-      
-    <BrowserRouter>
+    <div>
+
+      <BrowserRouter>
       <NavBar />
-      <ItemListContainer greeting={"Bienvenidos a APP WORK"} />
-    </BrowserRouter>
+
+      <Routes>
+      <Route exact path= '/' element={<Home />} />
+      <Route exact path= '/productos' element={<ItemListContainer />} />
+      <Route exact path= '/productos/:category' element={<ItemListContainer />} />
+      <Route exact path= '/productos/:category/:id' element={<ItemListContainer />} />
+      <Route exact path= '/cart' element={ <Cart />} />
+      <Route exact path= '/detalleProducto/:id' element={<ItemDetailContainer />} />
+      <Route exact path= '/about' element={<About />} />
+
+
+
+      </Routes>
+      
+      
+
+        
+      
+      </BrowserRouter>
+
+    </div>
+    
     
   )
 }

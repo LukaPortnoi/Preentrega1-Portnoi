@@ -1,0 +1,117 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.container{
+    margin: 0 auto;
+    padding: 0 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    
+}
+.filas{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+    /* grid-auto-rows: 100px; */
+    justify-content: space-around;
+}
+@media (max-width: 768px) {
+    .filas {
+        grid-template-columns: repeat(1, 1fr);    }
+  }
+
+.card{
+    transition: ease all .3s;
+    width: 100%;
+}
+.warpper1{
+    text-decoration: none;
+    cursor: pointer;
+    margin: 40px 10px 10px ;
+    padding: 0px 0px 300px 0px;
+    height: 450px;
+    width: 270px;
+    box-sizing: border-box;
+    position: relative;
+    box-shadow: 0 0 20px 10px rgba(25, 25, 25, .1);
+    transition: ease all .3s;
+    &:hover{
+        transform: translateY(-10px);
+        .card_img{
+            height: 40%;
+        }
+    }
+    
+}
+
+.color_bg{
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    &.Zapatillas{
+        background-color: #b82d44;
+    }
+    &.Remera{
+        background-color: #1d1d1d;
+    }
+    &.Pantalon{
+        background-color: #153a82;
+    }
+    &.Campera{
+        background-color: #3f4a69;
+    }
+}
+
+.card_img{
+    background-size: contain;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    position: absolute;
+    bottom: calc(100% - 45%);
+    width: 100%;
+    height: 30%;
+    transition: ease all .3s;
+
+}
+
+.cardInfo{
+    font-size: 7px;
+    text-align: center;
+    padding-top: 95% !important;
+    display: block;
+    padding: 20px 10px;
+    box-sizing: border-box;
+    color: #666;
+    .titulosCards{
+        
+        height: 90px;
+    }
+    p{
+        width: 100%;
+        font-size: 12px;
+        text-align: center;
+    }
+
+}
+
+.action{
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    margin-top: 10px;
+}
+
+.precio{
+    color: #000;
+    font-size: 20px;
+    margin-top: 10px;
+
+    font-weight: 800;
+}
