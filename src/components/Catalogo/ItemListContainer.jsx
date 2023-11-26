@@ -3,6 +3,7 @@ import Listado from './ItemList'
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react'
 import "./cards.css";
+import Loadering from '../Loader/loader';
 
 
 
@@ -13,6 +14,8 @@ const ItemListContainer = () => {
 
   const {category} = useParams()
   console.log(category)
+
+  const [progreso, setProgreso] = useState(null);
 
 /* const productos=[
     {id:1 , nombre: "Zapatillas" , descripcion: "Muy grandes", precio: 44, img : "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"},
@@ -58,7 +61,6 @@ const ItemListContainer = () => {
       datosFiltados = datos;
     }
     console.log(datosFiltados)
-    console.log(datosFiltados.image)
 
     return datosFiltados;
   }
@@ -67,11 +69,13 @@ const ItemListContainer = () => {
 
   useEffect(() =>{
 
+    setProgreso(true)
+
     getProducts().then((producto) => {
       setTimeout(()=>{
         setProductos(producto)
-          
-        }, 2000)
+        setProgreso(false)
+        }, 3000)
     }
     ).catch((error) => {
       console.log(error)
@@ -80,6 +84,10 @@ const ItemListContainer = () => {
 
 
   }, [category])
+
+  if(progreso){
+    return <Loadering />
+  }
 
 
   

@@ -9,6 +9,8 @@ import MuiAlert from '@mui/material/Alert';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
+import { CartContext } from "../context/ShoppingCartContext";
+import { useContext, useState } from 'react'
 
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -18,13 +20,18 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 const ItemCount = () => {
 
 const {contador, incrementar, decrementar} = usarContador(0,1)
+const {cartContador, setCartContador, comision} = useContext(CartContext)
+const [agregoCarrito, setAgregoCarrito] = useState(true);
 
 
 const [open, setOpen] = React.useState(false);
 
+
   const handleClick = () => {
     setOpen(true);
-  };
+    setCartContador(cartContador + contador)
+    setAgregoCarrito(false)
+  }
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -43,6 +50,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 
+
   return (
     <div>
         
@@ -58,11 +66,9 @@ const Item = styled(Paper)(({ theme }) => ({
           </Button>
           </Stack>
           
-          
+            
         </ButtonGroup>
-        <Button style={{  marginTop: '5%!important', display:'flex', margin:'auto' }} onClick={handleClick} variant="contained" size="medium">
-          Add to cart
-        </Button>
+        { agregoCarrito ? <Button style={{  marginTop: '5%!important', display:'flex', margin:'auto' }} onClick={handleClick} variant="contained" size="medium">  Agregar   </Button>   : <Button style={{  marginTop: '5%!important', display:'flex', margin:'auto' }}  variant="contained" size="medium">Ir al Carriro</Button> }
         <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
           <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
             Se agregaron {contador} productos
