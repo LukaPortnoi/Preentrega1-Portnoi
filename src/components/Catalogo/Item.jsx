@@ -25,7 +25,6 @@ const Item = ({datos}) => {
             </div>
             <div className='cardInfo'>
                 <h1 className='titulosCards'>{datos.title}</h1>
-                <p className='date_'>{datos.descripcion}</p>
                 <div className='action'>
                     <div className='precioGrupo'>
                         <p className='precio'>${datos.price}</p>
