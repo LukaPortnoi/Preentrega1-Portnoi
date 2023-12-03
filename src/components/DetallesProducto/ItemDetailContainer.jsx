@@ -3,14 +3,19 @@ import ItemDetail from './ItemDetail';
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react'
 import "./detalle.css";
+import {doc, getDoc,  getFirestore} from "firebase/firestore"
+
 
 const ItemDetailContainer = () => {
 
 
   const {id} = useParams()
   console.log(id)
+  const [producto, setProducto] = useState([])
 
-  const getProducts = async() => {
+
+
+  /*const getProducts = async() => {
     const response = await fetch("https://fakestoreapi.com/products")
     const datos = await response.json()
     
@@ -20,12 +25,25 @@ const ItemDetailContainer = () => {
     console.log(datosFiltados.image)
     return datosFiltados;
   }
-
-  const [producto, setProductos] = useState([])
+*/
 
   useEffect(() =>{
-    
-    getProducts().then((producto) => setProductos(producto))
+    let unSoloProductos =  [1];
+    const db = getFirestore()
+    const oneItem = doc(db, "productos", `${id}`)
+
+    getDoc(oneItem).then((snapshot)=>{
+      
+        const doc = snapshot.data()
+        unSoloProductos[0]= doc
+         console.log(unSoloProductos)
+
+        setProducto(unSoloProductos)
+        console.log(producto)
+
+      
+    })
+    /*getProducts().then((producto) => setProductos(producto))*/
 
   }, [])
 
@@ -33,7 +51,7 @@ const ItemDetailContainer = () => {
 
   return (
     <div>
-        <ItemDetail dato={producto} imagen={producto.image} />
+        <ItemDetail dato={producto} />
     </div>
   )
 }

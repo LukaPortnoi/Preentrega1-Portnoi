@@ -70,10 +70,10 @@ const NavBar = () => {
             </li>
             <li onClick={toggleSubmenu} className="menu-item sub__menus__arrows" >  Shop <FiChevronDown /> 
                         <ul className={boxClassSubMenu.join(' ')} > 
-                            <li> <NavLink onClick={toggleClass} activeClassName='is-active'  to={`/productos/women's clothing`}> Women's </NavLink> </li>
-                            <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/productos/men's clothing`}> Mens </NavLink> </li>
-                            <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/productos/jewelery`}> jewelery </NavLink> </li>
-                            <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/productos/electronics`}> Electronics </NavLink> </li>
+                            <li> <NavLink onClick={toggleClass} activeClassName='is-active'  to={`/productos/mujer`}> Women's </NavLink> </li>
+                            <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/productos/hombre`}> Mens </NavLink> </li>
+                            <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/productos/joya`}> jewelery </NavLink> </li>
+                            <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/productos/electronica`}> Electronics </NavLink> </li>
                         </ul>
             </li>
             <li>
