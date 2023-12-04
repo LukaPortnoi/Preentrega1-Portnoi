@@ -14,19 +14,6 @@ const ItemDetailContainer = () => {
   const [producto, setProducto] = useState([])
 
 
-
-  /*const getProducts = async() => {
-    const response = await fetch("https://fakestoreapi.com/products")
-    const datos = await response.json()
-    
-    let datosFiltados= datos.filter((datos) => datos.id == id);
-    
-    console.log(datosFiltados)
-    console.log(datosFiltados.image)
-    return datosFiltados;
-  }
-*/
-
   useEffect(() =>{
     let unSoloProductos =  [1];
     const db = getFirestore()
@@ -43,7 +30,6 @@ const ItemDetailContainer = () => {
 
       
     })
-    /*getProducts().then((producto) => setProductos(producto))*/
 
   }, [])
 

@@ -2,7 +2,6 @@ import React from 'react'
 import ItemContador from '../DetallesProducto/ItemCount'
 import { CCard, CRow , CCol, CCardImage , CCardBody , CCardTitle , CCardText} from '@coreui/react';
 import { CartContext } from "../context/ShoppingCartContext";
-import { useContext, useState } from 'react'
 
 
 
@@ -11,8 +10,7 @@ import { useContext, useState } from 'react'
 
 const ItemDetail = ({dato}) => {
 
-    const {cart, setCart, comision} = useContext(CartContext)
-
+const produto=dato;
     
   return (
     <div>
@@ -33,7 +31,7 @@ const ItemDetail = ({dato}) => {
                     <CCardText className='precio' style={{ display:'flex', margin:'auto', width: '100%', justifyContent:'center' }}>
                     Precio: {dato.price}
                     </CCardText>
-                    <ItemContador  />
+                    <ItemContador dato={produto} />
                 </CCardBody>
                 </CCol>
             </CRow>

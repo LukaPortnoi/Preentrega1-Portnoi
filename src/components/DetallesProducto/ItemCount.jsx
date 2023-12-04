@@ -11,13 +11,15 @@ import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import { CartContext } from "../context/ShoppingCartContext";
 import { useContext, useState } from 'react'
+import { doc,  getFirestore, updateDoc} from "firebase/firestore"
+
 
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-const ItemCount = () => {
+const ItemCount = ({dato}) => {
 
 const {contador, incrementar, decrementar} = usarContador(0,1)
 const {cartContador, setCartContador, comision} = useContext(CartContext)
@@ -26,11 +28,17 @@ const [agregoCarrito, setAgregoCarrito] = useState(true);
 
 const [open, setOpen] = React.useState(false);
 
+const updateOrder=(contador) => {
+  const db = getFirestore()
+  const orderDoc = doc(db, "productos", "puACUfFlr4wOiwiLoU7y")
+  updateDoc(orderDoc, {cantidadProductos : contador})
+}
 
   const handleClick = () => {
     setOpen(true);
     setCartContador(cartContador + contador)
     setAgregoCarrito(false)
+    updateOrder(contador)
   }
 
   const handleClose = (event, reason) => {

@@ -6,11 +6,13 @@ export const CartContext = createContext(null)
 export const ShoppingCartProvider = ({children})=>{
 
     const [cartContador, setCartContador] = useState(0)
+    const [objetosCarrito, setObjetosCarrito] = useState ([])
+    const [precio, setPrecio] = useState (0)
 
-    const comision = 54000;
+
 
     return(
-            <CartContext.Provider value={{cartContador, setCartContador, comision}}>
+            <CartContext.Provider value={{cartContador, setCartContador, objetosCarrito, setObjetosCarrito, precio, setPrecio}}>
 
                 {children}
             </CartContext.Provider>
