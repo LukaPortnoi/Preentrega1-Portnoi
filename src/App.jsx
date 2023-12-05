@@ -18,8 +18,6 @@ const App = () => {
       <ShoppingCartProvider>
       <BrowserRouter>
         <NavBar />
-
-        
         <Routes>
           <Route exact path= '/' element={<Home />} />
           <Route exact path= '/productos' element={<ItemListContainer />} />

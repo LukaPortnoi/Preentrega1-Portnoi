@@ -79,9 +79,12 @@ const NavBar = () => {
             <li>
               <NavLink to="/about">About</NavLink>
             </li>
+            <Link to="/cart">
             <li className="iconoCarrito" >
               <Carrito />
             </li>
+            </Link>
+      
           </ul>
         </div>
       </div>

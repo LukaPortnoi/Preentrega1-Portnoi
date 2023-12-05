@@ -16,6 +16,9 @@ body {
     height: 100%;
 }
 
+.nombreProductos {
+  text-align: center !important;
+}
 
 .imgAmazon {
     display: flex;

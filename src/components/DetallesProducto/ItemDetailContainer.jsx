@@ -1,43 +1,46 @@
 import React from 'react'
 import ItemDetail from './ItemDetail';
 import { useParams } from 'react-router-dom';
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import "./detalle.css";
 import {doc, getDoc,  getFirestore} from "firebase/firestore"
+import { CartContext } from "../context/ShoppingCartContext";
+
 
 
 const ItemDetailContainer = () => {
 
-
+  const {objetosCarrito, setObjetosCarrito, precio, setPrecio} = useContext(CartContext)
   const {id} = useParams()
-  console.log(id)
   const [producto, setProducto] = useState([])
+  const [idActualizar, setIdActualizar] = useState('')
+
 
 
   useEffect(() =>{
-    let unSoloProductos =  [1];
+    setTimeout
     const db = getFirestore()
     const oneItem = doc(db, "productos", `${id}`)
-
     getDoc(oneItem).then((snapshot)=>{
-      
+      setTimeout(()=>{
         const doc = snapshot.data()
-        unSoloProductos[0]= doc
-         console.log(unSoloProductos)
+        const docId = snapshot.id
+        console.log(docId)
 
-        setProducto(unSoloProductos)
-        console.log(producto)
+        setProducto(producto => [...producto, doc]);
+        setIdActualizar(docId);
 
-      
+
+        }, 1000)
+        
+
     })
-
   }, [])
 
-  
 
   return (
     <div>
-        <ItemDetail dato={producto} />
+        <ItemDetail dato={producto} id={idActualizar} />
     </div>
   )
 }

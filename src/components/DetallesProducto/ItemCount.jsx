@@ -11,7 +11,7 @@ import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import { CartContext } from "../context/ShoppingCartContext";
 import { useContext, useState } from 'react'
-import { doc,  getFirestore, updateDoc} from "firebase/firestore"
+import { doc,  getFirestore,getDoc, updateDoc} from "firebase/firestore"
 
 
 
@@ -19,10 +19,14 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-const ItemCount = ({dato}) => {
+const ItemCount = ({idActualizar}) => {
+
+  const id = idActualizar;
+ 
+
 
 const {contador, incrementar, decrementar} = usarContador(0,1)
-const {cartContador, setCartContador, comision} = useContext(CartContext)
+const {cartContador, setCartContador, objetosCarrito, setObjetosCarrito, precio, setPrecio} = useContext(CartContext)
 const [agregoCarrito, setAgregoCarrito] = useState(true);
 
 
@@ -30,15 +34,28 @@ const [open, setOpen] = React.useState(false);
 
 const updateOrder=(contador) => {
   const db = getFirestore()
-  const orderDoc = doc(db, "productos", "puACUfFlr4wOiwiLoU7y")
+  const orderDoc = doc(db, "productos", id)
+  getDoc(orderDoc).then((snapshot)=>{
+    const doc = snapshot.data()
+    const productos = {idCodificado: id, id: `${doc.idUnico}`, nombreProducto: `${doc.title}`, precioUnidad: `${doc.price}`, cantidad: `${doc.cantidadProductos}`, precio: doc.price * contador};
+    setObjetosCarrito(producto => [...producto, productos]);
+    setPrecio(precio + doc.price * contador)
+  })
   updateDoc(orderDoc, {cantidadProductos : contador})
-}
+  console.log(objetosCarrito)
+  console.log(precio)
 
+
+}
+ 
   const handleClick = () => {
     setOpen(true);
     setCartContador(cartContador + contador)
     setAgregoCarrito(false)
+    
     updateOrder(contador)
+    console.log(objetosCarrito)
+
   }
 
   const handleClose = (event, reason) => {
@@ -57,6 +74,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
+console.log(precio)
 
 
   return (

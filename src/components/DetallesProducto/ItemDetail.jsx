@@ -8,18 +8,22 @@ import { CartContext } from "../context/ShoppingCartContext";
 
 
 
-const ItemDetail = ({dato}) => {
+const ItemDetail = ({dato, id}) => {
 
 const produto=dato;
+const idUnico = id;
+console.log(idUnico)
+console.log(produto)
+
+
     
   return (
     <div>
       
       {
         dato.map((dato)=>{
-            
         return(
-          <div key={dato.id} className='col-md-5 contornoDetalle'>
+          <div key={dato.idUnico} className='col-md-5 contornoDetalle'>
             <CCard className="mb-3 cardTama " style={{  marginTop:'10px', display:'flex' }}>
             <CRow className="g-0 CartaAdentro" >
                 <CCol md={3} className='col1Card' >
@@ -31,7 +35,7 @@ const produto=dato;
                     <CCardText className='precio' style={{ display:'flex', margin:'auto', width: '100%', justifyContent:'center' }}>
                     Precio: {dato.price}
                     </CCardText>
-                    <ItemContador dato={produto} />
+                    <ItemContador dato={produto} idActualizar={idUnico} />
                 </CCardBody>
                 </CCol>
             </CRow>
