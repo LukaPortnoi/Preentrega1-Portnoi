@@ -36,10 +36,24 @@ const updateOrder=(contador) => {
   const db = getFirestore()
   const orderDoc = doc(db, "productos", id)
   getDoc(orderDoc).then((snapshot)=>{
+    let productoRepetido = false;
     const doc = snapshot.data()
     const productos = {idCodificado: id, id: `${doc.idUnico}`, nombreProducto: `${doc.title}`, precioUnidad: `${doc.price}`, cantidad: contador, precio: doc.price * contador};
-    setObjetosCarrito(producto => [...producto, productos]);
-    setPrecio(precio + doc.price * contador)
+    objetosCarrito.map((item) =>{
+      if(item.idCodificado == id){
+        item.cantidad=item.cantidad+contador;
+        item.precio=item.precio + productos.precio;
+        productoRepetido=true
+        setPrecio(precio + productos.precio)
+
+      }
+
+    } 
+    );
+    if(!productoRepetido){
+      setObjetosCarrito(producto => [...producto, productos]);
+      setPrecio(precio + doc.price * contador)
+    }
   })
   updateDoc(orderDoc, {cantidadProductos : contador})
   console.log(objetosCarrito)

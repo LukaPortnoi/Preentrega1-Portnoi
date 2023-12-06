@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useContext, useState, Fragment ,Suspense  } from 'react'
 import { CartContext } from "../context/ShoppingCartContext";
-import { useContext, useState, Fragment } from 'react'
 import { FormControl,TextField, OutlinedInput, InputLabel, InputAdornment} from '@mui/material';
 import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, IconButton, Stack } from "@mui/material";
 import FormControlContext from "@mui/material/FormControl/FormControlContext";
@@ -153,6 +152,17 @@ export default function cart() {
   const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [telefono, setTelefono] = React.useState('');
+  const [estadoFormulario, setEstadoFormulario] = React.useState(false);
+  const [error, setError] = useState(false);
+  const [showDelayedText, setShowDelayedText] =    useState(false);
+
+  function isValidEmail(email) {
+    return /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email);
+  }
+
+  console.log(name)
+
+
   const [open,openchange]=useState(false);
     const functionopenpopup=()=>{
         openchange(true);
@@ -164,11 +174,26 @@ export default function cart() {
   if(objetosCarrito.length>0){
     setEstadoCarrito(true)
   }
-  console.log(objetosCarrito)
 
+  const handleChange = (event) => {
+    if (!isValidEmail(event.target.value)) {
+      setError(true);
+    } else {
+      setError(false);
+      setEstadoFormulario(false)
+    }
+
+    setEmail(event.target.value);
+    console.log(email)
+  }
  
 
 
+  const VolverCargarModal = () => {
+
+    setShowDelayedText(false);
+    
+      };
 
 
 
@@ -199,8 +224,29 @@ export default function cart() {
   const emptyRows =
   page > 0 ? Math.max(0, (1 + page) * rowsPerPage - productosEditados.length) : 0;
   
+  
+  const handleClick = async () => {
+    await delay(2000);
+    setShowDelayedText(true);
+  };
+
+  const delay = async (ms) => {
+    return new Promise((resolve) => 
+        setTimeout(resolve, ms));
+};
+  function delayForm() {
+    handleClick()
+  
+
+  }
+
+  
 
   const ejecutarCompra = (detelleCarrito ) => {
+    delayForm()
+    
+
+    
 
     functionopenpopup()
       
@@ -251,10 +297,18 @@ const sendOrden=(detalleCompraTotal)=>{
 
 
   useEffect(() =>{
+    
+    if(!error && name != '' && telefono != ''){
+      setEstadoFormulario(true)
+    }
+    if(error || name == '' || telefono == ''){
+      setEstadoFormulario(false)
+    }
 
+
+    console.log(estadoFormulario)
     
-    
-  }, [productosEditados, estadoCarrito])
+  }, [productosEditados, estadoCarrito, name, telefono, email, error,showDelayedText])
 
 
 
@@ -268,7 +322,7 @@ const sendOrden=(detalleCompraTotal)=>{
         <div className='row ' style={{display: 'flex'}}>
           
           <div className="col-9" style={{width: '60%'}}>
-              <Box  className='listaProductos'>
+              <Box  className='listaProductos'       >
                 <Paper sx={{ width: '100%', mb: 2 }}>
                   <EnhancedTableToolbar  />
                   <TableContainer className='fondoColor'>
@@ -358,7 +412,7 @@ const sendOrden=(detalleCompraTotal)=>{
           <div className="col-3 divFormulario"   style={{width: '33%', display:'flex', justifyContent: 'center'}}>
             <FormControl className='formulario' fullWidth sx={{ width: '33ch' }}>
                   <p className='tituloCompra'>Completar formulario para terminar</p>
-                  <TextField style={{marginBottom:'10px'}}
+                  <TextField style={{marginBottom:'20px'}}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
@@ -367,45 +421,56 @@ const sendOrden=(detalleCompraTotal)=>{
                   size="small"
 
                 />
-                  <TextField style={{marginBottom:'10px'}}
+                  <TextField style={{marginBottom:'20px'}}
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={handleChange}
                   required
                   id="outlined-required"
                   label="Correo electronico"
                   type='email'
                   size="small"
-
                 />
-                  <TextField style={{marginBottom:'10px'}}
+                  { error ? <p  style={{marginLeft:'2%', marginTop:'-6%', fontSize:'12px', marginBottom:'2%' }}>Email inavlido</p> : <p  style={{display:'none'}}>Email inavlido</p>  }
+
+                  <TextField style={{marginBottom:'20px' }}
                   value={telefono}
-                  onChange={(e) => setTelefono(e.target.value)}
+                  onChange={(e) => setTelefono(e.target.value) }
                   required
                   type='number'
                   id="outlined-required"
                   label="Telefono"
                   size="small"
                 />
+
                 <p className='tituloTotal' style={{marginTop:'10px'}}>Total: ${precio} </p>
-                <button  onClick={() => ejecutarCompra(productosEditados) } target="_self" data-event="cartToOrderform" id="cart-to-orderform" className="btn btn-large btn-success pull-left-margin btn-place-order" data-i18n="cart.finalize" data-bind="click: cart.next">Proceder al pago</button>
-                <div style={{textAlign:'center'}}>
-                  <Dialog style={{ justifyContent:'center', textAlign:'center', margin:'auto', width:'80%'}}
-                  // fullScreen 
-                  open={open} onClose={closepopup} fullWidth maxWidth="sm">
-                      <DialogTitle style={{ fontSize:'30px'}}>Tu compra se realizo con exito!!</DialogTitle>
-                      <DialogContent>
-                          {/* <DialogContentText>Do you want remove this user?</DialogContentText> */}
-                          <Stack spacing={2} margin={2}>
-                          <DialogTitle> Id de compra: <span style={{ fontWeight:'bold'}}>{orderId}</span> </DialogTitle>
-                            <Button color="primary" variant="contained" style={{ margin:'auto', width:'50%'}}>Volver al inicio</Button>
-                          </Stack>
-                      </DialogContent>
-                      <DialogActions>
-                      {/* <Button color="success" variant="contained">Yes</Button>
-                          <Button onClick={closepopup} color="error" variant="contained">Close</Button> */}
-                      </DialogActions>
-                  </Dialog>
-                    </div>        
+                {
+                  !estadoFormulario ? <Button style={{margin:'auto'}} type='button' disabled onClick={() => ejecutarCompra(productosEditados) } target="_self" data-event="cartToOrderform" id="cart-to-orderform" className="btn btn-large btn-success pull-left-margin btn-place-order" data-i18n="cart.finalize" data-bind="click: cart.next">Proceder al pago</Button> : <Button style={{margin:'auto'}} type='button'  onClick={() => ejecutarCompra(productosEditados) } target="_self" data-event="cartToOrderform" id="cart-to-orderform" className="btn btn-large btn-success pull-left-margin btn-place-order" data-i18n="cart.finalize" data-bind="click: cart.next">Proceder al pago</Button>
+                }
+
+              {showDelayedText && (
+                  <div style={{textAlign:'center'}} >
+
+                    
+                    <Dialog orderId={orderId} style={{ justifyContent:'center', textAlign:'center', margin:'auto', width:'80%'}}
+                    // fullScreen 
+                    open={open} onClose={closepopup} fullWidth maxWidth="sm">
+                        <DialogTitle style={{ fontSize:'30px'}}>Tu compra se realizo con exito!!</DialogTitle>
+                        <DialogContent>
+                            {/* <DialogContentText>Do you want remove this user?</DialogContentText> */}
+                            <Stack spacing={2} margin={2}>
+                            <DialogTitle> Id de compra: <span style={{ fontWeight:'bold'}}>{orderId}</span> </DialogTitle>
+                              <Button color="primary" onClick={VolverCargarModal} variant="contained" style={{ margin:'auto', width:'50%'}}>Volver al inicio</Button>
+                            </Stack>
+                        </DialogContent>
+                        <DialogActions>
+                        {/* <Button color="success" variant="contained">Yes</Button>
+                            <Button onClick={closepopup} color="error" variant="contained">Close</Button> */}
+                        </DialogActions>
+                    </Dialog>
+                  </div>     
+                )}
+   
+                
                           {/*<TableCell align="center" className='precioTotal'> Total a pagar: </TableCell>*/}
             </FormControl>
           </div> 
@@ -425,3 +490,5 @@ const sendOrden=(detalleCompraTotal)=>{
     
   );
 }
+
+
