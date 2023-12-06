@@ -1,36 +1,25 @@
 import React, { useEffect } from 'react'
 import { CartContext } from "../context/ShoppingCartContext";
-import { useContext, useState } from 'react'
+import { useContext, useState, Fragment } from 'react'
 import { FormControl,TextField, OutlinedInput, InputLabel, InputAdornment} from '@mui/material';
-
+import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, IconButton, Stack } from "@mui/material";
+import FormControlContext from "@mui/material/FormControl/FormControlContext";
+import CloseIcon from "@mui/icons-material/Close"
 import { doc,  getFirestore,addDoc, collection, updateDoc} from "firebase/firestore"
 import "../Navbar/input.css";
-import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
-import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-import { Margin, Padding } from '@mui/icons-material';
-import ItemCount from '../DetallesProducto/ItemCount';
-import formularioCompra from './formulario';
-import { button } from '@nextui-org/react';
+
 
 
 
@@ -164,11 +153,21 @@ export default function cart() {
   const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [telefono, setTelefono] = React.useState('');
+  const [open,openchange]=useState(false);
+    const functionopenpopup=()=>{
+        openchange(true);
+    }
+    const closepopup=()=>{
+        openchange(false);
+    }
 
   if(objetosCarrito.length>0){
     setEstadoCarrito(true)
   }
   console.log(objetosCarrito)
+
+ 
+
 
 
 
@@ -202,6 +201,8 @@ export default function cart() {
   
 
   const ejecutarCompra = (detelleCarrito ) => {
+
+    functionopenpopup()
       
       
 
@@ -386,15 +387,36 @@ const sendOrden=(detalleCompraTotal)=>{
                   size="small"
                 />
                 <p className='tituloTotal' style={{marginTop:'10px'}}>Total: ${precio} </p>
-                <a href="#/orderform" onClick={() => ejecutarCompra(productosEditados)} target="_self" data-event="cartToOrderform" id="cart-to-orderform" className="btn btn-large btn-success pull-left-margin btn-place-order" data-i18n="cart.finalize" data-bind="click: cart.next">Proceder al pago</a>
-
+                <button  onClick={() => ejecutarCompra(productosEditados) } target="_self" data-event="cartToOrderform" id="cart-to-orderform" className="btn btn-large btn-success pull-left-margin btn-place-order" data-i18n="cart.finalize" data-bind="click: cart.next">Proceder al pago</button>
+                <div style={{textAlign:'center'}}>
+                  <Dialog style={{ justifyContent:'center', textAlign:'center', margin:'auto', width:'80%'}}
+                  // fullScreen 
+                  open={open} onClose={closepopup} fullWidth maxWidth="sm">
+                      <DialogTitle style={{ fontSize:'30px'}}>Tu compra se realizo con exito!!</DialogTitle>
+                      <DialogContent>
+                          {/* <DialogContentText>Do you want remove this user?</DialogContentText> */}
+                          <Stack spacing={2} margin={2}>
+                          <DialogTitle> Id de compra: <span style={{ fontWeight:'bold'}}>{orderId}</span> </DialogTitle>
+                            <Button color="primary" variant="contained" style={{ margin:'auto', width:'50%'}}>Volver al inicio</Button>
+                          </Stack>
+                      </DialogContent>
+                      <DialogActions>
+                      {/* <Button color="success" variant="contained">Yes</Button>
+                          <Button onClick={closepopup} color="error" variant="contained">Close</Button> */}
+                      </DialogActions>
+                  </Dialog>
+                    </div>        
                           {/*<TableCell align="center" className='precioTotal'> Total a pagar: </TableCell>*/}
             </FormControl>
           </div> 
         </div>
         </div> 
 
-        :   <p className='tituloTotal' style={{marginTop:'10px'}}>NO HAY PRODUCTOS EN EL CARRITO </p>
+        :   
+        <div> 
+            <p className='tituloTotal' style={{marginTop:'10px'}}>NO HAY PRODUCTOS EN EL CARRITO </p>
+            
+       </div>
           }
       
     
