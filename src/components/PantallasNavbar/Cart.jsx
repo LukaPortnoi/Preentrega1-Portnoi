@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { CartContext } from "../context/ShoppingCartContext";
 import { useContext, useState } from 'react'
-import { doc,  getFirestore,getDoc, updateDoc} from "firebase/firestore"
+import { FormControl,TextField, OutlinedInput, InputLabel, InputAdornment} from '@mui/material';
+
+import { doc,  getFirestore,addDoc, collection, updateDoc} from "firebase/firestore"
 import "../Navbar/input.css";
+import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -17,7 +20,6 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -25,6 +27,11 @@ import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
+import { Margin, Padding } from '@mui/icons-material';
+import ItemCount from '../DetallesProducto/ItemCount';
+import formularioCompra from './formulario';
+import { button } from '@nextui-org/react';
+
 
 
 
@@ -82,13 +89,13 @@ function EnhancedTableHead(props) {
       <TableRow>
         
         {headCells.map((headCell) => (
-          <TableCell
+          <TableCell 
             key={headCell.id}
             align={headCell.numeric ? 'center' : 'center'}
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
-            <TableSortLabel
+            <TableSortLabel className='cabecera'
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
               onClick={createSortHandler(headCell.id)}
@@ -120,51 +127,9 @@ function EnhancedTableToolbar(props) {
   const { numSelected } = props;
 
   return (
-    <Toolbar
-      sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-        }),
-      }}
-    >
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-          fontWeight={'700'}
-        >
-          Detalle
-        </Typography>
-      )}
-
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
-    </Toolbar>
+    <div className='parteSuperiorDetalle'>
+    
+    </div>
   );
 }
 
@@ -174,15 +139,38 @@ EnhancedTableToolbar.propTypes = {
 
 export default function cart() {
 
-  const {cartContador, setCartContador, objetosCarrito, setObjetosCarrito, precio, setPrecio} = useContext(CartContext)
+
+  const {
+    cartContador, 
+    setCartContador,
+    detalleCompraTotal,
+    setDetalleCompraTotal,
+    productosAcomprar,
+    setProductosAcomprar,
+    objetosCarrito,
+    setObjetosCarrito,
+    orderId, 
+    setOrderId,
+    precio, 
+    setPrecio,
+    estadoCarrito, setEstadoCarrito} = useContext(CartContext)
+
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [productosEditados, setProductosEditados] = React.useState(objetosCarrito);
+  const [name, setName] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [telefono, setTelefono] = React.useState('');
 
-  
+  if(objetosCarrito.length>0){
+    setEstadoCarrito(true)
+  }
+  console.log(objetosCarrito)
+
+
 
 
   const handleRequestSort = (event, property) => {
@@ -200,7 +188,7 @@ export default function cart() {
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+    setRowsPerPage(parseInt(event.target.value, 3));
     setPage(0);
   };
 
@@ -209,102 +197,209 @@ export default function cart() {
   };
 
 
-  // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - productosEditados.length) : 0;
+  page > 0 ? Math.max(0, (1 + page) * rowsPerPage - productosEditados.length) : 0;
+  
 
-  
-  
- 
-  
+  const ejecutarCompra = (detelleCarrito ) => {
+      
+      
+
+    const productosDetalle = detelleCarrito.map(item => (
+      {
+        idProducto: item.idCodificado, 
+        nombreProducto: item.nombreProducto,
+        precioUnidad: item.precioUnidad,
+        cantidad: item.cantidad,
+        precio: item.cantidad * item.precioUnidad ,
+
+      }
+    ));
+    setProductosAcomprar(productosDetalle)
+    const fecha = new Date();
+    const detalleTotal = {datos:{email: email , nombre: name , telefono: telefono} ,date: fecha, productosTotales:productosDetalle, estado: 'Generado', precioTotal: precio } 
+    setDetalleCompraTotal(detalleTotal)
+    sendOrden(detalleTotal)
+    console.log(orderId)
+
+   
+   console.log(detalleTotal)
+   console.log(precio)
+
+}
+
+const sendOrden=(detalleCompraTotal)=>{
+  console.log(detalleCompraTotal)
+
+  const order = {
+    datosComprador:detalleCompraTotal.datos,
+    Date:detalleCompraTotal.date,
+    Items:detalleCompraTotal.productosTotales,
+    estado:detalleCompraTotal.estado,
+    precio: detalleCompraTotal.precioTotal
+  }
+  console.log(order)
+
+  const db = getFirestore();
+  const ordersColllection = collection(db, "ordenes");
+  addDoc(ordersColllection, order).then(({id}) => setOrderId(id));
+
+
+  }
+
+
+
+  useEffect(() =>{
+
+    
+    
+  }, [productosEditados, estadoCarrito])
+
+
+
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar  />
-        <TableContainer>
-          <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
-          >
-            <EnhancedTableHead
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}
-              rowCount={productosEditados.length}
-            />
-            <TableBody >
-              {
-              productosEditados.map((item, index) => {
-                const labelId = `enhanced-table-checkbox-${index}`;
-
-                const removeItem = (id) => {
-                  const updatedList = productosEditados.filter((item) => item.id !== id  );
-                  setProductosEditados(updatedList);
-                  setObjetosCarrito(updatedList);
-                  const updateCart = productosEditados.filter((item) => item.id === id  );
-                  setCartContador(cartContador-updateCart[0].cantidad );
-                  const idProducto = updateCart[0].idCodificado;
-                  const db = getFirestore()
-                  const orderDoc = doc(db, "productos", idProducto)
-                  updateDoc(orderDoc, {cantidadProductos : 0})
-                 if(cartContador < 0){
-                  setCartContador(0);
-                 }
-                  console.log(cartContador)
-                };
-                
-                return (
-                  <TableRow
-                    hover
-                    
-                    tabIndex={-1}
-                    key={item.id}
-                    sx={{ cursor: 'pointer' }}
-                  >
-                   
-                    <TableCell className='nombreProductos'
-                      component="th"
-                      id={labelId}
-                      scope="row"
-                      padding="none"
+     
+      <div>
+      {
+      estadoCarrito ? 
+      <div className='container-fluis'>
+        <div className='row ' style={{display: 'flex'}}>
+          
+          <div className="col-9" style={{width: '60%'}}>
+              <Box  className='listaProductos'>
+                <Paper sx={{ width: '100%', mb: 2 }}>
+                  <EnhancedTableToolbar  />
+                  <TableContainer className='fondoColor'>
+                    <Table
+                      sx={{ minWidth: 550 }}
+                      aria-labelledby="tableTitle"
+                      size={dense ? 'small' : 'medium'}
                     >
-                      {item.nombreProducto}
-                    </TableCell>
-                    <TableCell align="center">{item.precioUnidad}</TableCell>
-                    <TableCell align="center">{item.cantidad}</TableCell>
-                    <TableCell align="center">{item.precio}</TableCell>
-                    <TableCell align="center"> <DeleteIcon  onClick={() => removeItem(item.id)}/></TableCell>
-                  </TableRow>
-                );
-              })}
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: (dense ? 33 : 53) * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={productosEditados.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      />
-    </Box>
+                      <EnhancedTableHead
+                        order={order}
+                        orderBy={orderBy}
+                        onRequestSort={handleRequestSort}
+                        rowCount={productosEditados.length}
+                      />
+                      <TableBody >
+                        {
+                        objetosCarrito.map((item, index) => {
+                          const labelId = `enhanced-table-checkbox-${index}`;
+
+                          const removeItem = (id) => {
+                            
+                              setEstadoCarrito(false)
+                            
+                            const updatedList = productosEditados.filter((item) => item.id !== id  );
+                            setProductosEditados(updatedList);
+                            setObjetosCarrito(updatedList);
+                            const updateCart = productosEditados.filter((item) => item.id === id  );
+                            setCartContador(cartContador-updateCart[0].cantidad );
+                            setPrecio(precio - updateCart[0].precio)
+                            const idProducto = updateCart[0].idCodificado;
+                            const db = getFirestore()
+                            const orderDoc = doc(db, "productos", idProducto)
+                            updateDoc(orderDoc, {cantidadProductos : 0})
+                            
+                          if(cartContador < 0){
+                            setCartContador(0);
+                          }
+                          if(precio < 0){
+                            setCartContador(0);
+                          }
+                            console.log(cartContador)
+                          };
+
+                          
+                          
+                          return (
+                            <TableRow className='rowsPersonalizadas'
+                              
+                              
+                              tabIndex={-1}
+                              key={item.id}
+                            >
+                            
+                              <TableCell className='nombreProductos'
+                                component="th"
+                                id={labelId}
+                                scope="row"
+                                padding="none"
+                              >
+                                {item.nombreProducto}
+                              </TableCell>
+                              <TableCell align="center" className='infoProductos'>${item.precioUnidad}</TableCell>
+                              <TableCell align="center" className='infoProductos'>{item.cantidad}</TableCell>
+                              <TableCell align="center" className='infoProductos'>${item.precio}</TableCell>
+                              <TableCell align="center"sx={{ cursor: 'pointer' }}> <DeleteIcon  onClick={() => removeItem(item.id)}/></TableCell>
+                            </TableRow>
+                          );
+                        })}
+                        {emptyRows > 0 && (
+                          <TableRow
+                            style={{
+                              height: (dense ? 33 : 53) * emptyRows,
+                            }}
+                          >
+                            <TableCell colSpan={6} />
+
+                          </TableRow>
+                        )}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                  {/*<TableCell align="center" className='precioTotal'> Total a pagar: ${precio}</TableCell>*/}
+
+                </Paper>
+            </Box> 
+          </div>
+          <div className="col-3 divFormulario"   style={{width: '33%', display:'flex', justifyContent: 'center'}}>
+            <FormControl className='formulario' fullWidth sx={{ width: '33ch' }}>
+                  <p className='tituloCompra'>Completar formulario para terminar</p>
+                  <TextField style={{marginBottom:'10px'}}
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  id="outlined-required"
+                  label="Nombre"
+                  size="small"
+
+                />
+                  <TextField style={{marginBottom:'10px'}}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  id="outlined-required"
+                  label="Correo electronico"
+                  type='email'
+                  size="small"
+
+                />
+                  <TextField style={{marginBottom:'10px'}}
+                  value={telefono}
+                  onChange={(e) => setTelefono(e.target.value)}
+                  required
+                  type='number'
+                  id="outlined-required"
+                  label="Telefono"
+                  size="small"
+                />
+                <p className='tituloTotal' style={{marginTop:'10px'}}>Total: ${precio} </p>
+                <a href="#/orderform" onClick={() => ejecutarCompra(productosEditados)} target="_self" data-event="cartToOrderform" id="cart-to-orderform" className="btn btn-large btn-success pull-left-margin btn-place-order" data-i18n="cart.finalize" data-bind="click: cart.next">Proceder al pago</a>
+
+                          {/*<TableCell align="center" className='precioTotal'> Total a pagar: </TableCell>*/}
+            </FormControl>
+          </div> 
+        </div>
+        </div> 
+
+        :   <p className='tituloTotal' style={{marginTop:'10px'}}>NO HAY PRODUCTOS EN EL CARRITO </p>
+          }
+      
+    
+    </div> 
+
+    
   );
 }

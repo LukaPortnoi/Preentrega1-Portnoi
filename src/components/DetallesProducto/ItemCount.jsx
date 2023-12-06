@@ -26,7 +26,7 @@ const ItemCount = ({idActualizar}) => {
 
 
 const {contador, incrementar, decrementar} = usarContador(0,1)
-const {cartContador, setCartContador, objetosCarrito, setObjetosCarrito, precio, setPrecio} = useContext(CartContext)
+const {cartContador, setCartContador, objetosCarrito, setObjetosCarrito, precio, setPrecio,estadoCarrito, setEstadoCarrito} = useContext(CartContext)
 const [agregoCarrito, setAgregoCarrito] = useState(true);
 
 
@@ -37,7 +37,7 @@ const updateOrder=(contador) => {
   const orderDoc = doc(db, "productos", id)
   getDoc(orderDoc).then((snapshot)=>{
     const doc = snapshot.data()
-    const productos = {idCodificado: id, id: `${doc.idUnico}`, nombreProducto: `${doc.title}`, precioUnidad: `${doc.price}`, cantidad: `${doc.cantidadProductos}`, precio: doc.price * contador};
+    const productos = {idCodificado: id, id: `${doc.idUnico}`, nombreProducto: `${doc.title}`, precioUnidad: `${doc.price}`, cantidad: contador, precio: doc.price * contador};
     setObjetosCarrito(producto => [...producto, productos]);
     setPrecio(precio + doc.price * contador)
   })
@@ -52,6 +52,7 @@ const updateOrder=(contador) => {
     setOpen(true);
     setCartContador(cartContador + contador)
     setAgregoCarrito(false)
+    setEstadoCarrito(true)
     
     updateOrder(contador)
     console.log(objetosCarrito)

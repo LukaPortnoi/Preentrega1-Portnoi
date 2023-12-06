@@ -4,7 +4,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Poppins', sans-serif;
-  background-color: #fcfcfc;
+  background-color: #fff;
 }
 
 .containerNav {
@@ -73,6 +73,136 @@ body {
     justify-content: space-between;
     list-style-type: none;
 }
+
+
+
+.cabecera{
+  padding-left: 25px !important;
+  font-size: 14px !important;
+    font-weight: 700 !important;
+}
+
+.infoProductos {
+  
+  font-size: 12px !important;
+    font-weight: 700 !important;
+}
+
+
+.precioTotal{
+  display: block !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+}
+.parteSuperiorDetalle{
+  display: none !important;
+   
+}
+.nombreProductos{
+width: 200px;   
+}
+
+
+
+
+
+.listaProductos{
+  margin-top: 30px !important;
+  margin-left: 20px !important;
+  background-color: #f5f5f5 !important;
+  width: calc(100%) !important;   }
+
+  .rowsPersonalizadas{
+    height: 100px;  }
+  
+
+  .css-1mxz8qt-MuiPaper-root{
+    background-color: #f5f5f5 !important;  
+  }
+  
+  .filas{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+    /* grid-auto-rows: 100px; */
+    justify-content: space-around;
+}
+
+.formulario {
+  margin: auto;
+  display: -webkit-inline-box;  /* grid-auto-rows: 100px; */
+  justify-content: center;
+}
+
+.divFormulario {
+  margin-top: 30px;
+    margin-left: 40px;
+    background-color: #f5f5f5;
+    width: 35%;
+    display: flex;
+    justify-content: center;
+    height: 350px;
+}
+
+.tituloCompra {
+  font-family: "TradeGothicForNike","Helvetica",sans-serif;
+    text-align: center;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #000;
+    width: 100%;
+    display: block;
+}
+
+.tituloTotal {
+  color: #111;
+    font-size: 1.275rem;
+    font-weight: bold;
+    justify-content: center;
+    display: flex;
+}
+
+
+
+.btn-place-order::before{
+  content: "Iniciar pago";
+    font-size: 1rem;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: all;
+}
+
+.btn-place-order{
+  margin: auto;
+  background-color: #111;
+    color: #fff;
+    font-size: .875rem;
+    line-height: 45px;
+    border-radius: 9999px;
+    display: block;
+    height: 45px;
+    min-height: 45px;
+    transition: opacity .2s;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 0 28px;
+    text-decoration: none;
+    padding: 0;
+    font-size: 0;
+    width: 290px;
+    pointer-events: none;
+}
+
+.btn-place-order:hover{
+  background-color: #111;
+    opacity: .7;
+}
+
 
 
 .counter {
