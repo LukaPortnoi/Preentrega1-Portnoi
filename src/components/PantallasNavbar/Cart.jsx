@@ -207,18 +207,7 @@ export default function cart() {
 
   
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 3));
-    setPage(0);
-  };
-
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
-  };
+  
 
 
   const emptyRows =
@@ -315,13 +304,13 @@ const sendOrden=(detalleCompraTotal)=>{
 
   return (
      
-      <div>
+      <div className='divCart'>
       {
       estadoCarrito ? 
-      <div className='container-fluis'>
-        <div className='row ' style={{display: 'flex'}}>
+      <div className='container-fluid'>
+        <div className='row rowCart' style={{display: 'flex'}}>
           
-          <div className="col-9" style={{width: '60%'}}>
+          <div className="col-9 divMobile" style={{width: '60%'}}>
               <Box  className='listaProductos'       >
                 <Paper sx={{ width: '100%', mb: 2 }}>
                   <EnhancedTableToolbar  />

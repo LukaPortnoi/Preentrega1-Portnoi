@@ -128,6 +128,40 @@ width: 200px;
     justify-content: space-around;
 }
 
+
+@media (max-width: 768px) {
+  .divCart{
+    width: 100%;
+    display: flex;
+  }
+  .divMobile{
+    width: 55%;
+  }
+
+  .css-1u3bzj6-MuiFormControl-root-MuiTextField-root {
+  margin: auto;
+    align-items: center;
+    width: 80%;
+  }
+  .listaProductos {
+    margin-top: 30px !important;
+    margin-left: 20px !important;
+    background-color: #f5f5f5 !important;
+    width: calc(89%) !important;
+}
+  .rowCart{
+    display: grid !important;
+    grid-template-columns: repeat(1, 1fr);
+    grid-gap: 10px;
+    justify-content: center;
+    margin: auto;
+  }
+  .divFormulario{
+    width: 50%!important;
+  }
+}
+
+
 .formulario {
   margin: auto;
   display: -webkit-inline-box;  /* grid-auto-rows: 100px; */
@@ -194,7 +228,7 @@ width: 200px;
     text-decoration: none !important;
     padding: 0 !important;
     font-size: 0 !important;
-    width: 290px !important;
+    width: 90% !important;
     pointer-events: none !important;
 }
 
