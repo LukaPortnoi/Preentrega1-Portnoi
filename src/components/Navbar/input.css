@@ -7,6 +7,11 @@ body {
   background-color: #fff;
 }
 
+.tituloHomeAbout{
+  margin-top: 20px;
+  text-align: center;
+}
+
 .containerNav {
     margin: 0 auto;
     padding: 0 15px;

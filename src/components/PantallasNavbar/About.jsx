@@ -6,8 +6,8 @@ const About = () => {
 
 
   return (
-    <div>
-      {comision}
+    <div className='tituloHomeAbout'>
+      Nosotros
     </div>
   )
 }
